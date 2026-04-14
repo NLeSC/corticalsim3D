@@ -1,10 +1,10 @@
 #include "corticalSimReal.h"
 
 DeterministicQueue::DeterministicQueue(System* s, double (System::*dtFunc)(double), double (System::*tdFunc)(double)) :
-		system(s),
-		distanceTimeConversionFunction(dtFunc),
-		timeDistanceConversionFunction(tdFunc),
-		currentBase(0)
+        system(s),
+        currentBase(0),
+        distanceTimeConversionFunction(dtFunc),
+        timeDistanceConversionFunction(tdFunc)
 {
 	// do not use the system pointer here, as it has not been initialized
 	valueCache[0] = 0;
@@ -57,14 +57,14 @@ DeterministicEvent DeterministicQueue::pop()
 
 void DeterministicQueue::advanceTime(double t)
 {
-        // get advanced in time 
+        // get advanced in time
 	currentBase += (system->*timeDistanceConversionFunction)(t - system->systemTime);
 	return;
 }
 
 void DeterministicQueue::storeTime(int tag)
 {
-        // store the current base time 
+        // store the current base time
 	valueCache[tag] = currentBase;
 	return;
 }
@@ -94,8 +94,8 @@ EventTrackingTag DeterministicQueue::pushDeterministic(double timedist, EventDes
 }
 
 EventDescriptor::EventDescriptor(Microtubule* m, DeterministicQueue* q, double velocity) :
-		mt(m),
-		index(0),
+        index(0),
+        mt(m),
 		type(ev_none),
 		tag(-1),
 		queue(q)
@@ -122,7 +122,7 @@ EventDescriptor::EventDescriptor(Microtubule* m, DeterministicQueue* q, double v
 
 EventDescriptor::~EventDescriptor()
 {
-	// unregister the event descriptor	
+	// unregister the event descriptor
 	mt->system->unregisterEventDescriptor(index);
 	return;
 }
@@ -156,7 +156,7 @@ void EventDescriptor::pushOnQueue(double dist, DeterministicEventType t)
 
 	type = t;
 
-        // store deterministic event into the queue 
+        // store deterministic event into the queue
 	tag = queue->pushDeterministic(queue->currentPos() + dist*distanceScaleFactor, index);
 	return;
 }
